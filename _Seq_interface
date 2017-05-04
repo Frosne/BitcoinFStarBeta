@@ -1,0 +1,8 @@
+abstract val length: #a:Type -> seq a -> Tot nat
+abstract val index:  #a:Type -> s:seq a -> i:nat{i < length s} -> Tot a
+
+val cons: #a:Type -> a -> seq a -> Tot (seq a)
+val head: #a:Type -> s:seq a{length s > 0} -> Tot a
+
+abstract val append: #a:Type -> seq a -> seq a -> Tot (seq a)
+val tail: #a:Type -> s:seq a{length s > 0} -> Tot (seq a)
