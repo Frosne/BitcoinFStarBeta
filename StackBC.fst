@@ -68,3 +68,8 @@ let pop #a st =
 	let elem = pop_elem #a st in 
 	let stack = pop_stack #a st in 
 	(elem,stack)
+
+val equal : #a : eqtype -> st1:stackBC a -> st2: stackBC a -> Tot(bool)
+let equal #a st1 st2  = 
+	Seq.eq (elements st1) (elements st2) && (length st1 = length st2) && (capacity st1 = capacity st2)
+

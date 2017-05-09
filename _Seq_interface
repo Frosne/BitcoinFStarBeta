@@ -7,5 +7,10 @@ val head: #a:Type -> s:seq a{length s > 0} -> Tot a
 abstract val append: #a:Type -> seq a -> seq a -> Tot (seq a)
 val tail: #a:Type -> s:seq a{length s > 0} -> Tot (seq a)
 
+abstract val create: #a:Type -> nat -> a -> Tot (seq a)
 
 val split: #a:Type -> s:seq a -> i:nat{(0 <= i /\ i <= length s)} -> Tot (seq a * seq a)
+
+val mem: #a:eqtype -> a -> seq a -> Tot bool
+
+val find_l: #a:Type -> f:(a -> Tot bool) -> l:seq a -> Tot (o:option a{Some? o ==> f (Some?.v o)})
