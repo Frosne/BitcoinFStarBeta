@@ -4,6 +4,11 @@ open FStar.Seq
 
 module Seq = FStar.Seq
 
+
+(* Stack is implemented over the sequence of natural numbers - byte per element *)
+(* has the following fields - elem (stack itself) + length and capacity properties *)
+(* implements the folowwing methods - push/pop/equal *)
+(* NB : push_element/pop_element was provided just for comfort and assumes the following methods - get a heap without changing stack etc *)
 type stackBC (a:eqtype) = 
 | Mk : elem: seq a -> cap: nat -> len : nat{len = Seq.length elem} -> stackBC a
 

@@ -9,13 +9,10 @@ module Stack = StackBC
 module Seq = FStar.Seq
 module List = FStar.List.Tot
 
-(* 76 A9 14 ... 88 AC *)
-
-
 assume val hash_sha256: input : seq nat  -> Tot(r: seq nat{Seq.length r = 32} )
 assume val hash_ripemd160: input : seq nat -> Tot(r: seq nat{Seq.length r = 20} )
 
-(* 118 *)
+(* duplicate the heap of stack*)
 val op_dup :  st_before: stackBC (seq nat){Stack.length st_before > 0 /\ Stack.capacity st_before > 0}  -> 
 				line_before: seq nat{Seq.length line_before > 0 /\ (Seq.head line_before = 118)} 
 				-> result_before : bool{result_before = true}
@@ -33,6 +30,7 @@ let op_dup  st_before line_before result_before =
 	let stack_push2 = Stack.push stack_push1 element in 
 	let line = Seq.tail line_before in (stack_push2, line, result_before)
 
+(* takes the first element of stack and pushs its hash *)
 val op_hash160 : st_before : stackBC (seq nat){Stack.length st_before > 0} -> 
 				line_before : seq nat {Seq.length line_before > 0 /\ (Seq.head line_before = 169)}
 				-> result_before : bool {result_before = true}
@@ -51,8 +49,6 @@ let op_hash160 st_before line_before result_before =
 		let line = Seq.tail line_before in (stack_push1, line, result_before)
 
 (* 1 - 75*)
-
-(*val split: #a:Type -> s:seq a -> i:nat{(0 <= i /\ i <= length s)} -> Tot (seq a * seq a) *)
 val op_push : st_before: stackBC (seq nat){ capacity st_before > 0}
 				-> line_before : seq nat {Seq.length line_before > 0 /\ 
 											Seq.length line_before > 1 + (Seq.head line_before) /\
@@ -74,6 +70,7 @@ let op_push st_before line_before result_before =
 		let stack_push1 = Stack.push st_before element  in 
 		(stack_push1, snd line, result_before)
 
+(* checks the equality of 2 elements in stack*)
 val op_equalverify: st_before : stackBC (seq nat){Stack.length st_before > 1} -> 
 			line_before : seq nat {Seq.length line_before > 0 /\ Seq.head line_before = 136} ->
 			result_before : bool{result_before = true} -> 
@@ -88,7 +85,8 @@ let op_equalverify st_before line_before result_before =
 	let result = (elem1 = elem2) in 
 	let line = Seq.tail line_before in  
 	(snd pop2, line, result)
-
+	
+(*pushs false to stack *)
 val op_false: st_before: stackBC (seq nat) {Stack.capacity st_before > 0}-> 
 				line_before : seq nat {Seq.length line_before > 0 /\ Seq.head line_before = 0}-> 
 				result_before : bool{result_before = true} ->
